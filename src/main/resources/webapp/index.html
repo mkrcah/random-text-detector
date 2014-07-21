@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap 101 Template</title>
+    <title>Random text detector</title>
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -15,21 +15,50 @@
 </head>
 <body>
 
-<!--<a href="https://github.com/you"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>-->
+<a href="https://github.com/mkrcah/random-text-detector">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+         src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67"
+         alt="Fork me on GitHub"
+         data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png">
+</a>
 
 <div class="container" ng-app="app" ng-controller="myCtrl">
     <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
-
+        <div class="col-md-8">
             <h1>Random text detector</h1>
 
-             <p>Enter a name to the form below: </p>
+            <p>
+                This is an interactive version of the detector of random text, as described in
+                <a href="#">this blog post</a>. The algorithm is unsupervised and it was trained on
+                <a href="https://raw.githubusercontent.com/mkrcah/random-text-detector/master/data/names-input.txt">this
+                    list</a>
+                of 2000 most common US names combined with 20 random words.
+            </p>
+
+            <p>First, try to put common names like Ema, Collin or Jacqueline - the suspicious score should be below 25.
+                Then try random words like werpoiupoi, gdsfgsdfg or kjlkjllkj - the suspicious score should be above 25.
+                Results are not always perfect, but the score works suprisingly well for such a simple algorithm.
+                (The threshold of 25 was set empirically based on this training dataset.)
+            </p>
+
+            <p>
+                As described in the blog post, the algorithm can also be used to sort a list of words according to the
+                suspicious score. Example of such sorted list can be found
+                <a href="https://raw.githubusercontent.com/mkrcah/random-text-detector/master/data/names-output-adjusted-idf.txt">here.</a>
+            </p>
+
+            <p>
+                author <a href="https://twitter.com/mkrcah">@mkrcah</a>, code available on <a
+                    href="https://github.com/mkrcah/random-text-detector">GitHub</a>
+            </p>
+
+            <br/>
+
 
             <form name="form" ng-submit="checkWord(word)" class="form-inline" role="form">
                 <div class="form-group">
                     <label class="sr-only">Username</label>
-                    <input ng-model="word" class="form-control" placeholder="Enter name">
+                    <input maxlength="30" ng-model="word" class="form-control" placeholder="Enter a name">
                 </div>
                 <button type="submit" class="btn btn-default">Check</button>
 
@@ -37,20 +66,25 @@
 
             <div ng-show="result">
                 <h4>
-                    <span ng-show="result.score < 25" class="label label-success">Looks ok</span>
-                    <span ng-show="result.score >= 25 && result.score < 35" class="label label-info">Suspicious</span>
-                    <span ng-show="result.score >= 35" class="label label-danger">Looks very random</span>
-                    Score of randomness: {{ result.score | number:0 }}
+                    <span ng-show="result.score < 25" class="label label-success">
+                        Looks ok - suspicious score {{ result.score | number:0 }}
+                    </span>
+                    <span ng-show="result.score >= 25 && result.score < 35" class="label label-info">
+                        Looks suspicious - suspicious score {{ result.score | number:0 }}
+                    </span>
+                    <span ng-show="result.score >= 35" class="label label-danger">
+                        Looks very random - suspicious score {{ result.score | number:0 }}
+                    </span>
                 </h4>
 
                 <div class="row">
                     <div class="col-md-6">
                         <table class="table table-condensed table-hover">
                             <thead>
-                                <tr>
-                                    <th>Ngram</th>
-                                    <th><Score></Score></th>
-                                </tr>
+                            <tr>
+                                <th>Ngram</th>
+                                <th>Score (adjusted-IDF)</th>
+                            </tr>
 
                             </thead>
                             <tbody>
@@ -60,7 +94,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Total</strong></td>
-                                <td>{{result.score | number:1}}</td>
+                                <td><strong>{{result.score | number:1}}</strong></td>
                             </tr>
                             </tbody>
                         </table>
@@ -71,8 +105,8 @@
     </div>
 </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 </body>
 </html>

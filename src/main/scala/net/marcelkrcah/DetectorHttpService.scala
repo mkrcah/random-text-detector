@@ -19,6 +19,8 @@ trait DetectorHttpService extends HttpService {
 
   def detector: RandomTextDetector
 
+  val MaxWordLength = 30
+
   val route =
     path("") {
       getFromResource("webapp/index.html")
@@ -31,8 +33,9 @@ trait DetectorHttpService extends HttpService {
         parameters('q) { word =>
           respondWithMediaType(`application/json`) {
             complete {
-              val (score, ngrams) = detector.getScore(word)
-              val jsonResult = ApiCommands.getScore(word, score, ngrams)
+              val wordNormalized = word.trim.toLowerCase.take(MaxWordLength).mkString("")
+              val (score, ngrams) = detector.getScore(wordNormalized)
+              val jsonResult = ApiCommands.getScore(wordNormalized, score, ngrams)
               jsonResult.prettyPrint
             }
           }
