@@ -10,8 +10,8 @@ class RandomTextDetector(words: List[String]) extends NLPUtils {
 
   val idf = {
     val idfFn = toAdjustedIdf(termCount.values.max) _
-//    val idfFn = toStandardIdf(words.size) //
-    termCount.mapValues(toAdjustedIdf(termCount.values.max)).withDefaultValue(idfFn(0))
+//    val idfFn = toStandardIdf(words.size) _
+    termCount.mapValues(idfFn).withDefaultValue(idfFn(0))
   }
 
   def getScore(word: String): (Double, StringVector[Double]) = {
